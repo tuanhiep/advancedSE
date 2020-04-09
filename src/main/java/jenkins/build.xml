@@ -1,0 +1,16 @@
+<?xml version = "1.0"?>
+<project name="main" basedir="." default="run">
+  <target name = "info">
+     <echo>Hello World - Welcome to Apache Ant!</echo>
+  </target>
+  <target name="compile">
+    <javac includeantruntime="false" destdir = "." source = "1.8" target = "1.8">
+      <src path = "."/>
+    </javac>
+  </target>
+  <target name="run" depends="compile">
+    <java fork = "true"  classname = "RunnedTask">
+         <arg line = "'Compassion neutralizes hatred'"/>
+      </java>
+  </target>
+</project>
