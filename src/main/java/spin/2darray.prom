@@ -1,0 +1,90 @@
+//
+// Two different ways of creating a 2D array
+// - I think I prefer method two, but both are fine
+//
+
+// define the array dimensions
+#define WIDTH  3
+#define HEIGHT 4
+
+//
+// method one: declare the width inside a typedef, then
+// declare the height as an array of the rows
+//
+typedef Array {
+   int row[WIDTH];
+};
+Array arrayOne[HEIGHT];
+
+//
+// method two: just use a 1D array and create a macro that
+// properly indexes it using two indices
+// - note: even in C/C++, macro args should have parens around
+//         their usage, for safety
+//
+int arrayTwoData[HEIGHT*WIDTH];
+#define arrayTwo(r,c) arrayTwoData[(r)*WIDTH + (c)]
+
+//
+// Loops below just walk through the arrays, first initializing
+// and then printing each one.
+//
+init {
+   int i,j;
+   printf("initialize arrayOne...\n");
+   i = 0; j = 0;
+   do
+   :: (i < HEIGHT) ->
+      j = 0;
+      do
+      :: (j < WIDTH) ->
+         arrayOne[i].row[j] = i+j; // i+j is just a dummy value
+         j++;
+      :: else -> break;
+      od
+      i++;
+   :: else -> break;
+   od
+   printf("print arrayOne...\n");
+   i = 0; j = 0;
+   do
+   :: (i < HEIGHT) ->
+      j = 0;
+      do
+      :: (j < WIDTH) ->
+         printf("aone[%d,%d] = %d\n",i,j,arrayOne[i].row[j]);
+         j++;
+      :: else -> break;
+      od
+      i++;
+   :: else -> break;
+   od
+   printf("initialize arrayTwo...\n");
+   i = 0; j = 0;
+   do
+   :: (i < HEIGHT) ->
+      j = 0;
+      do
+      :: (j < WIDTH) ->
+         arrayTwo(i,j) = i+j; // NOTE: parens, not brackets!
+         j++;
+      :: else -> break;
+      od
+      i++;
+   :: else -> break;
+   od
+   printf("print arrayTwo...\n");
+   i = 0; j = 0;
+   do
+   :: (i < HEIGHT) ->
+      j = 0;
+      do
+      :: (j < WIDTH) ->
+         printf("atwo[%d,%d] = %d\n",i,j,arrayTwo(i,j));
+         j++;
+      :: else -> break;
+      od
+      i++;
+   :: else -> break;
+   od
+}

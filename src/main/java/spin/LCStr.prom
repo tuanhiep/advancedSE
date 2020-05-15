@@ -1,0 +1,138 @@
+#define S_SIZE 2
+#define T_SIZE 2
+int arrayData[S_SIZE*T_SIZE];
+#define arrayL(r,c) arrayData[(r)*T_SIZE + (c)]
+
+inline LCSubstr(){
+
+int i;
+for (i : 0 .. S_SIZE-1) {
+  int j;
+  for (j : 0 .. T_SIZE-1) {
+    if
+    :: S[i] == T[j] ->
+                if
+                :: i == 0 || j == 0 -> arrayL(i, j) = 1;
+                :: else ->
+                  int m=i-1;
+                  int n=j-1;
+                  arrayL(i, j) = arrayL(m, n) + 1;
+                fi
+                if
+                :: arrayL(i, j) > z ->
+                    z = arrayL(i, j);
+                    index_S = i;
+                    index_T = j;
+                :: arrayL(i, j) == z ->
+                    index_S = i;
+                    index_T = j;
+                :: else ->;
+                fi
+    :: else -> arrayL(i, j) = 0;
+    fi
+  }
+}
+
+printf(" LCStr length is %d ! \n",z);
+printf(" index_S  is %d  \n",index_S);
+printf(" index_T is %d  \n",index_T);
+printf(" Common substring : \n")
+int p;
+for(p : index_S-z+1 .. index_S){
+  printf("%c",S[p])
+}
+printf("\n")
+}
+
+inline proveFoundStringIsSubString(){
+
+/*Assert that the found string is a substring of both sequences*/
+assert(z<= S_SIZE && z<=T_SIZE && (index_S-z+1 >=0) && (index_T-z+1 >=0))
+
+}
+
+inline proveNoLongerCommonSubstringExists(){
+/*Assert that no longer common substring exists = assert that the common substring of length z+1 doesn't exist*/
+bool flag=false;
+int h;
+for (h : 0 .. S_SIZE-1) {
+  int k;
+  for (k : 0 .. T_SIZE-1) {
+    if
+    :: S[h] == T[k] ->
+      /* Check if we have more z common characters between 2 string so that common substring of length z+1 exists */
+      bool exist= true;
+      if
+      :: h+z <= S_SIZE-1 && k+z <=T_SIZE-1 ->
+        int p;
+        for(p: 1..z){
+          int x=h+p;
+          int y=k+p;
+          if
+          :: S[x]!= T[y] -> exist= false;
+          :: else ->;
+          fi
+        }
+        if
+        :: exist== true ->
+          flag=true;
+          break;
+        :: else ->;
+        fi
+      :: else -> exist= false;
+      fi
+
+    :: else -> ;
+    fi
+  }
+}
+/* flag==false means that the common substring of length z+1 doesn't exist, we prove that maximum common substring length is z */
+assert(flag==false);
+
+}
+inline random(v)
+{
+  do
+  :: (v > 0) -> v--;
+  :: (v < 25) -> v++;
+  :: (true) -> break;
+  od
+}
+
+inline generateS(){
+  printf("Array S is : \n");
+  int i;
+  for (i : 0 .. S_SIZE-1){
+    int j=i;
+    random(j);
+    S[i]= alphabet[j];
+    printf("%c",S[i]);
+  }
+  printf("\n");
+}
+inline generateT(){
+  printf("Array T is : \n");
+  int i;
+  for (i : 0 .. T_SIZE-1){
+    int j=i;
+    random(j);
+    T[i]= alphabet[j];
+    printf("%c",T[i]);
+  }
+  printf("\n");
+}
+
+init {
+byte alphabet[26]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}
+byte S[S_SIZE];
+generateS();
+byte T[T_SIZE];
+generateT();
+int z=0;
+int index_S=-1;
+int index_T=-1;
+LCSubstr();
+proveFoundStringIsSubString();
+proveNoLongerCommonSubstringExists()
+
+}

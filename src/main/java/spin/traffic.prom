@@ -1,0 +1,66 @@
+
+/*
+* Spin example: traffic lights
+*/
+
+#define red    1
+#define yellow 2
+#define green  3
+
+byte light[2];
+#define NS 0
+#define EW 1
+
+byte turn;
+
+proctype trafficLight(byte me; byte other; byte c1; byte c2)
+{
+   byte time=0;
+   do
+   :: (light[me] == green) ->
+      light[me] = yellow;
+      turn = other;
+      time = 0;
+      printf("%c%c changed to yellow\n",c1,c2);
+   :: (light[me] == green && time < 5) ->
+      time++;
+      printf("%c%c stayed green\n",c1,c2);
+   :: (light[me] == red) ->
+      turn = other;
+      atomic { 
+         (light[other] != green && turn == me);
+         light[me] = green;
+      }
+      time = 0;
+      printf("%c%c changed to green\n",c1,c2);
+   :: (light[me] == red && time < 5) ->
+      time++;
+      printf("%c%c stayed red\n",c1,c2);
+   :: (light[me] == yellow) ->
+      light[me] = red;
+      time = 0;
+      printf("%c%c changed to red\n",c1,c2);
+   :: (light[me] == yellow && time < 2) ->
+      time++;
+      printf("%c%c stayed yellow\n",c1,c2);
+   od
+}
+
+init {
+   light[NS] = red;
+   light[EW] = red;
+   turn = EW;
+   atomic {
+      run trafficLight(NS,EW,'N','S');
+      run trafficLight(EW,NS,'E','W');
+   }
+}
+
+ltl SafetyNotBothGreen {[]!(light[EW]==green && light[NS]==green)}
+
+ltl LiveGoGreen {[]<>(light[NS] == green)}
+
+
+
+
+

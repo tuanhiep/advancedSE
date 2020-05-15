@@ -1,0 +1,78 @@
+
+#define ARRAYSIZE 5
+#define MAXVALUE 5
+#define MINVALUE -5
+
+inline findMax(maxi)
+{
+   maxi = 0;
+   i = 1;
+   do
+   :: (i < ARRAYSIZE) ->
+      if
+      :: (vals[i] > vals[maxi]) -> maxi = i;
+      :: else -> ;
+      fi
+      i++;
+   :: else -> break;
+   od
+}
+
+inline checkMax(maxi)
+{
+   i=0;
+   do
+   :: (i < ARRAYSIZE) -> 
+      if
+      :: (vals[i] > vals[maxi]) -> isMax = false;
+      :: else -> ;
+      fi
+      i++;
+   :: else -> break;
+   od
+   assert(isMax == true);
+}
+
+inline genArray()
+{
+   i=0;
+   do
+   :: (i < ARRAYSIZE) -> random(vals[i]); i++;
+   :: else -> break;
+   od
+}
+
+inline printArray()
+{
+   i=0;
+   printf("array:");
+   do
+   :: (i < ARRAYSIZE) -> printf(" %d",vals[i]); i++;
+   :: else -> break;
+   od
+   printf("\n");
+}
+
+inline random(v)
+{
+   do
+   :: (v > MINVALUE) -> v--;
+   :: (v < MAXVALUE) -> v++;
+   :: (true) -> break;
+   od
+}
+
+init {
+   int vals[ARRAYSIZE];
+   int maxIndex, i;
+   bool isMax;
+   isMax = true;
+   genArray();
+   printArray();
+   findMax(maxIndex);
+   printf("max value is %d at index %d\n",vals[maxIndex],maxIndex);
+   checkMax(maxIndex);
+}
+
+
+

@@ -1,0 +1,34 @@
+
+inline swap(a, b)
+{
+   a = a+b;
+   b = b+a;
+   a = b-a;
+   b = b-2*a;
+}
+
+inline random(v)
+{
+   do
+   :: (v > 0) -> v--;
+   :: (v < 255) -> v++;
+   :: (true) -> break;
+   od
+}
+
+init {
+   byte x, y, oldx, oldy;
+   x = 42;
+   y = 99;
+   random(x);
+   random(y);
+   oldx = x;
+   oldy = y;
+   printf("x=%d  y=%d\n",x,y);
+   printf("swapping...\n");
+   swap(x,y);
+   printf("x=%d  y=%d\n",x,y);
+   assert(x==oldy && y==oldx);
+}
+
+
